@@ -1,0 +1,917 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+// Get recent posts
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 8);
+
+const featuredPosts = recentPosts.slice(0, 3);
+const latestPosts = recentPosts.slice(3, 6);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead 
+			title="Home" 
+			description={SITE_DESCRIPTION}
+			keywords="blog, technology, tutorials, reviews, lifestyle"
+		/>
+	</head>
+
+	<body>
+		<Header />
+
+		<main>
+			<!-- Minimal Hero Section -->
+			<section class="hero">
+				<div class="container">
+					<div class="hero-content">
+						<h1 class="hero-title">{SITE_TITLE}</h1>
+						<p class="hero-tagline">Thoughts, tutorials, and insights on technology and life</p>
+						<div class="hero-stats">
+							<div class="stat">
+								<span class="stat-number">{allPosts.length}+</span>
+								<span class="stat-label">Articles</span>
+							</div>
+							<div class="stat">
+								<span class="stat-number">5K+</span>
+								<span class="stat-label">Readers</span>
+							</div>
+							<div class="stat">
+								<span class="stat-number">3+</span>
+								<span class="stat-label">Years</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Featured Articles -->
+			{featuredPosts.length > 0 && (
+				<section class="featured-section">
+					<div class="container">
+						<h2 class="section-title">Featured Articles</h2>
+						<div class="featured-grid">
+							{featuredPosts.map((post, index) => (
+								<article class={`featured-card ${index === 0 ? 'featured-card--large' : ''}`}>
+									<a href={`/blog/${post.id}/`} class="card-link">
+										<div class="card-image">
+											<img 
+												src={post.data.heroImage || '/images/post-placeholder.jpg'} 
+												alt={post.data.title}
+												width="600"
+												height="400"
+												loading="lazy"
+											/>
+											{index === 0 && <span class="featured-badge">Featured</span>}
+										</div>
+										<div class="card-content">
+											<div class="card-meta">
+												<time datetime={post.data.pubDate.toISOString()}>
+													<FormattedDate date={post.data.pubDate} />
+												</time>
+												{post.data.tags && post.data.tags.length > 0 && (
+													<span class="card-tag">#{post.data.tags[0]}</span>
+												)}
+											</div>
+											<h3 class="card-title">{post.data.title}</h3>
+											<p class="card-excerpt">{post.data.description}</p>
+											<span class="read-more">
+												Read more
+												<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+													<path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
+												</svg>
+											</span>
+										</div>
+									</a>
+								</article>
+							))}
+						</div>
+					</div>
+				</section>
+			)}
+
+			<!-- Latest Posts -->
+			{latestPosts.length > 0 && (
+				<section class="latest-section">
+					<div class="container">
+						<div class="section-header">
+							<h2 class="section-title">Latest Posts</h2>
+							<a href="/blog" class="view-all-link">
+								View all posts
+								<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+									<path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
+								</svg>
+							</a>
+						</div>
+						<div class="latest-grid">
+							{latestPosts.map((post) => (
+								<article class="post-item">
+									<a href={`/blog/${post.id}/`} class="post-link">
+										<div class="post-image">
+											<img 
+												src={post.data.heroImage || '/images/post-placeholder.jpg'} 
+												alt={post.data.title}
+												width="300"
+												height="200"
+												loading="lazy"
+											/>
+										</div>
+										<div class="post-content">
+											<div class="post-meta">
+												<time datetime={post.data.pubDate.toISOString()}>
+													<FormattedDate date={post.data.pubDate} />
+												</time>
+												{post.data.tags && post.data.tags.length > 0 && (
+													<span class="post-tag">#{post.data.tags[0]}</span>
+												)}
+											</div>
+											<h3 class="post-title">{post.data.title}</h3>
+											<p class="post-summary">{post.data.description}</p>
+										</div>
+									</a>
+								</article>
+							))}
+						</div>
+					</div>
+				</section>
+			)}
+
+			<!-- Topics Section -->
+			<section class="topics-section">
+				<div class="container">
+					<h2 class="section-title">Explore Topics</h2>
+					<div class="topics-grid">
+						<div class="topic-card">
+							<div class="topic-icon">
+								<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+									<path d="M20,18H4V8H20M20,6H12L10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6Z" />
+								</svg>
+							</div>
+							<h3 class="topic-title">Technology</h3>
+							<p class="topic-description">Latest trends, tutorials, and insights in tech</p>
+							<a href="/blog/category/technology" class="topic-link">Explore →</a>
+						</div>
+						
+						<div class="topic-card">
+							<div class="topic-icon">
+								<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+									<path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+								</svg>
+							</div>
+							<h3 class="topic-title">Lifestyle</h3>
+							<p class="topic-description">Life tips, productivity, and personal growth</p>
+							<a href="/blog/category/lifestyle" class="topic-link">Explore →</a>
+						</div>
+						
+						<div class="topic-card">
+							<div class="topic-icon">
+								<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+									<path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M13,9H18.5L13,14.5V9M6,9H11V11H6V9M6,13H11V15H6V13Z" />
+								</svg>
+							</div>
+							<h3 class="topic-title">Tutorials</h3>
+							<p class="topic-description">Step-by-step guides and how-to articles</p>
+							<a href="/blog/category/tutorials" class="topic-link">Explore →</a>
+						</div>
+						
+						<div class="topic-card">
+							<div class="topic-icon">
+								<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+									<path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+								</svg>
+							</div>
+							<h3 class="topic-title">Reviews</h3>
+							<p class="topic-description">Honest reviews of tools, books, and products</p>
+							<a href="/blog/category/reviews" class="topic-link">Explore →</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Newsletter Section -->
+			<section class="newsletter-section">
+				<div class="container">
+					<div class="newsletter-card">
+						<div class="newsletter-content">
+							<h2 class="newsletter-title">Never Miss a Post</h2>
+							<p class="newsletter-description">
+								Get the latest articles and insights delivered to your inbox. 
+								No spam, unsubscribe at any time.
+							</p>
+							<form class="newsletter-form" action="/api/newsletter" method="POST">
+								<div class="form-group">
+									<input 
+										type="email" 
+										name="email" 
+										placeholder="Enter your email" 
+										required 
+										class="newsletter-input"
+									/>
+									<button type="submit" class="newsletter-button">
+										Subscribe
+									</button>
+								</div>
+								<p class="newsletter-note">
+									Join 1,000+ subscribers. Read our <a href="/privacy">privacy policy</a>.
+								</p>
+							</form>
+						</div>
+						<div class="newsletter-visual">
+							<div class="visual-element"></div>
+							<div class="visual-element"></div>
+							<div class="visual-element"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- About Preview -->
+			<section class="about-preview">
+				<div class="container">
+					<div class="about-content">
+						<div class="about-text">
+							<h2 class="about-title">Hi, I'm [Your Name]</h2>
+							<p class="about-description">
+								I'm a developer and writer passionate about making technology accessible. 
+								When I'm not coding, you'll find me exploring new ideas, reading, or sharing 
+								what I've learned with the community.
+							</p>
+							<a href="/about" class="about-link">
+								Learn more about me
+								<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+									<path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
+								</svg>
+							</a>
+						</div>
+						<div class="about-image">
+							<img 
+								src="/images/author-avatar.jpg" 
+								alt="Author photo"
+								width="200"
+								height="200"
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<Footer />
+	</body>
+</html>
+
+<style>
+	/* Hero Section */
+	.hero {
+		padding: var(--space-20) 0 var(--space-16);
+		text-align: center;
+		background: 
+			radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+			radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+			var(--bg-primary);
+	}
+
+	.hero-content {
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.hero-title {
+		font-size: var(--text-6xl);
+		font-weight: 700;
+		margin-bottom: var(--space-4);
+		color: var(--text-primary);
+		letter-spacing: -0.02em;
+	}
+
+	.hero-tagline {
+		font-size: var(--text-xl);
+		color: var(--text-secondary);
+		margin-bottom: var(--space-12);
+		font-weight: 400;
+	}
+
+	.hero-stats {
+		display: flex;
+		justify-content: center;
+		gap: var(--space-12);
+	}
+
+	.stat {
+		text-align: center;
+	}
+
+	.stat-number {
+		display: block;
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--primary);
+		line-height: 1;
+	}
+
+	.stat-label {
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-top: var(--space-1);
+	}
+
+	/* Sections */
+	.featured-section,
+	.latest-section,
+	.topics-section {
+		padding: var(--space-16) 0;
+	}
+
+	.section-title {
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-12);
+		text-align: center;
+	}
+
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		margin-bottom: var(--space-12);
+	}
+
+	.section-header .section-title {
+		margin: 0;
+		text-align: left;
+	}
+
+	.view-all-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: var(--primary);
+		font-weight: 500;
+		text-decoration: none;
+		transition: var(--transition);
+	}
+
+	.view-all-link:hover {
+		color: var(--primary-dark);
+		transform: translateX(2px);
+	}
+
+	/* Featured Grid */
+	.featured-grid {
+		display: grid;
+		grid-template-columns: 2fr 1fr 1fr;
+		gap: var(--space-8);
+	}
+
+	.featured-card {
+		border-radius: var(--radius-xl);
+		overflow: hidden;
+		border: 1px solid var(--border);
+		transition: var(--transition);
+		background: var(--bg-primary);
+	}
+
+	.featured-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-xl);
+		border-color: var(--primary);
+	}
+
+	.featured-card--large {
+		grid-row: span 2;
+	}
+
+	.card-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		height: 100%;
+	}
+
+	.card-image {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: 16 / 10;
+	}
+
+	.featured-card--large .card-image {
+		aspect-ratio: 16 / 12;
+	}
+
+	.card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: var(--transition);
+	}
+
+	.featured-card:hover .card-image img {
+		transform: scale(1.05);
+	}
+
+	.featured-badge {
+		position: absolute;
+		top: var(--space-4);
+		left: var(--space-4);
+		background: linear-gradient(135deg, var(--primary), var(--accent));
+		color: white;
+		padding: var(--space-1) var(--space-3);
+		border-radius: var(--radius-full);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.card-content {
+		padding: var(--space-6);
+		height: calc(100% - 200px);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.featured-card--large .card-content {
+		height: calc(100% - 240px);
+	}
+
+	.card-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-4);
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+	}
+
+	.card-tag {
+		background: var(--bg-secondary);
+		color: var(--primary);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		font-weight: 500;
+	}
+
+	.card-title {
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-3);
+		line-height: 1.3;
+	}
+
+	.featured-card--large .card-title {
+		font-size: var(--text-xl);
+	}
+
+	.card-excerpt {
+		color: var(--text-secondary);
+		line-height: 1.5;
+		margin-bottom: var(--space-4);
+		flex: 1;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.read-more {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: var(--primary);
+		font-weight: 500;
+		font-size: var(--text-sm);
+		transition: var(--transition);
+	}
+
+	.featured-card:hover .read-more {
+		color: var(--primary-dark);
+		transform: translateX(2px);
+	}
+
+	/* Latest Grid */
+	.latest-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--space-8);
+	}
+
+	.post-item {
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		border: 1px solid var(--border);
+		transition: var(--transition);
+		background: var(--bg-primary);
+	}
+
+	.post-item:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--primary);
+	}
+
+	.post-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.post-image {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+	}
+
+	.post-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: var(--transition);
+	}
+
+	.post-item:hover .post-image img {
+		transform: scale(1.05);
+	}
+
+	.post-content {
+		padding: var(--space-5);
+	}
+
+	.post-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--space-3);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+	}
+
+	.post-tag {
+		background: var(--bg-secondary);
+		color: var(--primary);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		font-weight: 500;
+	}
+
+	.post-title {
+		font-size: var(--text-base);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-2);
+		line-height: 1.4;
+	}
+
+	.post-summary {
+		color: var(--text-secondary);
+		font-size: var(--text-sm);
+		line-height: 1.5;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* Topics Section */
+	.topics-section {
+		background-color: var(--bg-secondary);
+	}
+
+	.topics-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: var(--space-6);
+	}
+
+	.topic-card {
+		background: var(--bg-primary);
+		padding: var(--space-6);
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--border);
+		transition: var(--transition);
+		text-align: center;
+	}
+
+	.topic-card:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-md);
+		border-color: var(--primary);
+	}
+
+	.topic-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 3.5rem;
+		height: 3.5rem;
+		background: var(--bg-secondary);
+		color: var(--primary);
+		border-radius: var(--radius-lg);
+		margin-bottom: var(--space-4);
+	}
+
+	.topic-title {
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-2);
+	}
+
+	.topic-description {
+		color: var(--text-secondary);
+		font-size: var(--text-sm);
+		margin-bottom: var(--space-4);
+		line-height: 1.5;
+	}
+
+	.topic-link {
+		color: var(--primary);
+		font-weight: 500;
+		text-decoration: none;
+		font-size: var(--text-sm);
+		transition: var(--transition);
+	}
+
+	.topic-link:hover {
+		color: var(--primary-dark);
+	}
+
+	/* Newsletter Section */
+	.newsletter-section {
+		padding: var(--space-20) 0;
+	}
+
+	.newsletter-card {
+		background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+		border-radius: var(--radius-2xl);
+		padding: var(--space-12);
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		gap: var(--space-12);
+		align-items: center;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.newsletter-content {
+		color: white;
+		z-index: 2;
+		position: relative;
+	}
+
+	.newsletter-title {
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		margin-bottom: var(--space-4);
+	}
+
+	.newsletter-description {
+		font-size: var(--text-lg);
+		opacity: 0.9;
+		margin-bottom: var(--space-8);
+		line-height: 1.6;
+	}
+
+	.form-group {
+		display: flex;
+		gap: var(--space-3);
+		margin-bottom: var(--space-3);
+	}
+
+	.newsletter-input {
+		flex: 1;
+		padding: var(--space-4);
+		border: none;
+		border-radius: var(--radius-md);
+		font-size: var(--text-base);
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+		color: white;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.newsletter-input::placeholder {
+		color: rgba(255, 255, 255, 0.7);
+	}
+
+	.newsletter-input:focus {
+		background: rgba(255, 255, 255, 0.2);
+		border-color: rgba(255, 255, 255, 0.4);
+		outline: none;
+	}
+
+	.newsletter-button {
+		padding: var(--space-4) var(--space-6);
+		background: white;
+		color: var(--primary);
+		border: none;
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		cursor: pointer;
+		transition: var(--transition);
+		white-space: nowrap;
+	}
+
+	.newsletter-button:hover {
+		background: var(--gray-100);
+		transform: translateY(-1px);
+	}
+
+	.newsletter-note {
+		font-size: var(--text-sm);
+		opacity: 0.8;
+		margin: 0;
+	}
+
+	.newsletter-note a {
+		color: white;
+		text-decoration: underline;
+	}
+
+	.newsletter-visual {
+		position: relative;
+		height: 200px;
+	}
+
+	.visual-element {
+		position: absolute;
+		border-radius: var(--radius-full);
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+	}
+
+	.visual-element:nth-child(1) {
+		width: 80px;
+		height: 80px;
+		top: 20px;
+		right: 40px;
+		animation: float 6s ease-in-out infinite;
+	}
+
+	.visual-element:nth-child(2) {
+		width: 60px;
+		height: 60px;
+		top: 120px;
+		right: 120px;
+		animation: float 6s ease-in-out infinite 2s;
+	}
+
+	.visual-element:nth-child(3) {
+		width: 40px;
+		height: 40px;
+		top: 60px;
+		right: 160px;
+		animation: float 6s ease-in-out infinite 4s;
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0px); }
+		50% { transform: translateY(-20px); }
+	}
+
+	/* About Preview */
+	.about-preview {
+		padding: var(--space-16) 0;
+		background-color: var(--bg-secondary);
+	}
+
+	.about-content {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		gap: var(--space-12);
+		align-items: center;
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.about-title {
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.about-description {
+		font-size: var(--text-lg);
+		color: var(--text-secondary);
+		line-height: 1.6;
+		margin-bottom: var(--space-6);
+	}
+
+	.about-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: var(--primary);
+		font-weight: 500;
+		text-decoration: none;
+		transition: var(--transition);
+	}
+
+	.about-link:hover {
+		color: var(--primary-dark);
+		transform: translateX(2px);
+	}
+
+	.about-image {
+		display: flex;
+		justify-content: center;
+	}
+
+	.about-image img {
+		border-radius: var(--radius-full);
+		border: 4px solid var(--primary);
+		width: 200px;
+		height: 200px;
+		object-fit: cover;
+	}
+
+	/* Responsive Design */
+	@media (max-width: 1024px) {
+		.featured-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.featured-card--large {
+			grid-column: 1 / -1;
+			grid-row: auto;
+		}
+
+		.newsletter-card {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+
+		.about-content {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.hero-title {
+			font-size: var(--text-4xl);
+		}
+
+		.hero-stats {
+			gap: var(--space-8);
+		}
+
+		.featured-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.section-header {
+			flex-direction: column;
+			align-items: center;
+			gap: var(--space-4);
+		}
+
+		.section-header .section-title {
+			text-align: center;
+		}
+
+		.form-group {
+			flex-direction: column;
+		}
+
+		.newsletter-button {
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.hero {
+			padding: var(--space-16) 0 var(--space-12);
+		}
+
+		.hero-title {
+			font-size: var(--text-3xl);
+		}
+
+		.hero-tagline {
+			font-size: var(--text-lg);
+		}
+
+		.hero-stats {
+			flex-direction: column;
+			gap: var(--space-4);
+		}
+
+		.newsletter-card {
+			padding: var(--space-8);
+		}
+	}
+</style>
