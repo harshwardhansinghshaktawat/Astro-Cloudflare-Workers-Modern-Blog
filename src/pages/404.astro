@@ -1,0 +1,662 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Get some recent posts to suggest
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead 
+			title="Page Not Found - 404" 
+			description="Sorry, we couldn't find the page you're looking for. Explore our latest articles or return to the homepage."
+		/>
+	</head>
+
+	<body>
+		<Header />
+
+		<main class="error-main">
+			<div class="container">
+				<div class="error-content">
+					<!-- Error Hero -->
+					<div class="error-hero">
+						<div class="error-visual">
+							<div class="error-number">404</div>
+							<div class="error-icon">
+								<svg viewBox="0 0 24 24" width="80" height="80" fill="currentColor">
+									<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+								</svg>
+							</div>
+						</div>
+						<div class="error-text">
+							<h1 class="error-title">Page Not Found</h1>
+							<p class="error-description">
+								Oops! The page you're looking for seems to have wandered off into the digital wilderness. 
+								Don't worry, it happens to the best of us.
+							</p>
+							<div class="error-actions">
+								<a href="/" class="btn btn-primary btn-large">
+									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+										<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+									</svg>
+									Go Home
+								</a>
+								<a href="/blog" class="btn btn-secondary btn-large">
+									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+										<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+									</svg>
+									Browse Articles
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Search Section -->
+					<div class="search-section">
+						<h2 class="search-title">Looking for something specific?</h2>
+						<p class="search-description">Try searching for what you need:</p>
+						<form class="search-form" role="search">
+							<div class="search-input-group">
+								<input 
+									type="search" 
+									name="q" 
+									placeholder="Search articles, topics, or keywords..." 
+									class="search-input"
+									aria-label="Search"
+								/>
+								<button type="submit" class="search-button" aria-label="Search">
+									<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+										<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+									</svg>
+								</button>
+							</div>
+						</form>
+					</div>
+
+					<!-- Popular Links -->
+					<div class="popular-links">
+						<h3 class="popular-title">Popular Pages</h3>
+						<div class="links-grid">
+							<a href="/" class="link-card">
+								<div class="link-icon">
+									<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+										<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+									</svg>
+								</div>
+								<div class="link-content">
+									<h4 class="link-title">Homepage</h4>
+									<p class="link-description">Start your journey here</p>
+								</div>
+							</a>
+							
+							<a href="/blog" class="link-card">
+								<div class="link-icon">
+									<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+										<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+									</svg>
+								</div>
+								<div class="link-content">
+									<h4 class="link-title">All Articles</h4>
+									<p class="link-description">Browse our full library</p>
+								</div>
+							</a>
+							
+							<a href="/about" class="link-card">
+								<div class="link-icon">
+									<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+										<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+									</svg>
+								</div>
+								<div class="link-content">
+									<h4 class="link-title">About Us</h4>
+									<p class="link-description">Learn our story</p>
+								</div>
+							</a>
+							
+							<a href="/contact" class="link-card">
+								<div class="link-icon">
+									<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+										<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+									</svg>
+								</div>
+								<div class="link-content">
+									<h4 class="link-title">Contact</h4>
+									<p class="link-description">Get in touch</p>
+								</div>
+							</a>
+						</div>
+					</div>
+
+					<!-- Recent Posts -->
+					{recentPosts.length > 0 && (
+						<div class="recent-posts">
+							<h3 class="recent-title">Recent Articles</h3>
+							<p class="recent-description">Check out our latest content:</p>
+							<div class="posts-grid">
+								{recentPosts.map((post) => (
+									<article class="post-card">
+										<a href={`/blog/${post.id}/`} class="post-link">
+											<div class="post-image">
+												<img 
+													src={post.data.heroImage || '/images/post-placeholder.jpg'} 
+													alt={post.data.title}
+													width="300"
+													height="200"
+													loading="lazy"
+												/>
+											</div>
+											<div class="post-content">
+												<h4 class="post-title">{post.data.title}</h4>
+												<p class="post-excerpt">{post.data.description}</p>
+												<span class="post-date">
+													{post.data.pubDate.toLocaleDateString('en-US', { 
+														year: 'numeric', 
+														month: 'long', 
+														day: 'numeric' 
+													})}
+												</span>
+											</div>
+										</a>
+									</article>
+								))}
+							</div>
+						</div>
+					)}
+
+					<!-- Help Section -->
+					<div class="help-section">
+						<h3 class="help-title">Still need help?</h3>
+						<p class="help-description">
+							If you believe this is an error or you were expecting to find something here, 
+							please don't hesitate to reach out to us.
+						</p>
+						<a href="/contact" class="help-link">
+							Contact Support
+							<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+								<path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<Footer />
+
+		<script>
+			// Auto-focus search input for better UX
+			document.addEventListener('DOMContentLoaded', () => {
+				const searchInput = document.querySelector('.search-input');
+				if (searchInput) {
+					// Focus after a short delay to ensure page is loaded
+					setTimeout(() => {
+						searchInput.focus();
+					}, 500);
+				}
+
+				// Handle search form submission
+				const searchForm = document.querySelector('.search-form');
+				if (searchForm) {
+					searchForm.addEventListener('submit', (e) => {
+						e.preventDefault();
+						const query = searchInput.value.trim();
+						if (query) {
+							// Redirect to blog page with search query
+							window.location.href = `/blog?search=${encodeURIComponent(query)}`;
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+</html>
+
+<style>
+	.error-main {
+		min-height: calc(100vh - var(--header-height));
+		padding: var(--space-16) 0;
+	}
+
+	.error-content {
+		max-width: 1000px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+	}
+
+	/* Error Hero */
+	.error-hero {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-12);
+		align-items: center;
+		text-align: center;
+	}
+
+	.error-visual {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.error-number {
+		font-size: 8rem;
+		font-weight: 900;
+		color: var(--primary);
+		opacity: 0.1;
+		position: absolute;
+		z-index: 1;
+		line-height: 1;
+	}
+
+	.error-icon {
+		position: relative;
+		z-index: 2;
+		color: var(--primary);
+		animation: bounce 2s infinite;
+	}
+
+	@keyframes bounce {
+		0%, 20%, 50%, 80%, 100% {
+			transform: translateY(0);
+		}
+		40% {
+			transform: translateY(-10px);
+		}
+		60% {
+			transform: translateY(-5px);
+		}
+	}
+
+	.error-text {
+		text-align: left;
+	}
+
+	.error-title {
+		font-size: var(--text-5xl);
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-6);
+		line-height: 1.1;
+	}
+
+	.error-description {
+		font-size: var(--text-lg);
+		color: var(--text-secondary);
+		line-height: 1.6;
+		margin-bottom: var(--space-8);
+	}
+
+	.error-actions {
+		display: flex;
+		gap: var(--space-4);
+		flex-wrap: wrap;
+	}
+
+	.btn-large {
+		padding: var(--space-4) var(--space-8);
+		font-size: var(--text-lg);
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	/* Search Section */
+	.search-section {
+		background: var(--bg-secondary);
+		padding: var(--space-12);
+		border-radius: var(--radius-2xl);
+		text-align: center;
+		border: 1px solid var(--border);
+	}
+
+	.search-title {
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.search-description {
+		font-size: var(--text-lg);
+		color: var(--text-secondary);
+		margin-bottom: var(--space-8);
+	}
+
+	.search-form {
+		max-width: 500px;
+		margin: 0 auto;
+	}
+
+	.search-input-group {
+		display: flex;
+		gap: var(--space-3);
+		background: var(--bg-primary);
+		border: 2px solid var(--border);
+		border-radius: var(--radius-lg);
+		padding: var(--space-2);
+		transition: var(--transition);
+	}
+
+	.search-input-group:focus-within {
+		border-color: var(--primary);
+		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+	}
+
+	.search-input {
+		flex: 1;
+		border: none;
+		background: transparent;
+		padding: var(--space-3);
+		font-size: var(--text-base);
+		color: var(--text-primary);
+		outline: none;
+	}
+
+	.search-input::placeholder {
+		color: var(--text-muted);
+	}
+
+	.search-button {
+		background: var(--primary);
+		color: white;
+		border: none;
+		padding: var(--space-3);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		transition: var(--transition);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.search-button:hover {
+		background: var(--primary-dark);
+		transform: translateY(-1px);
+	}
+
+	/* Popular Links */
+	.popular-links {
+		text-align: center;
+	}
+
+	.popular-title {
+		font-size: var(--text-2xl);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-8);
+	}
+
+	.links-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: var(--space-6);
+	}
+
+	.link-card {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		padding: var(--space-6);
+		background: var(--bg-primary);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		text-decoration: none;
+		color: inherit;
+		transition: var(--transition);
+	}
+
+	.link-card:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--primary);
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.link-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 3rem;
+		height: 3rem;
+		background: var(--bg-secondary);
+		color: var(--primary);
+		border-radius: var(--radius-lg);
+		flex-shrink: 0;
+	}
+
+	.link-content {
+		text-align: left;
+	}
+
+	.link-title {
+		font-size: var(--text-base);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-1);
+	}
+
+	.link-description {
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	/* Recent Posts */
+	.recent-posts {
+		text-align: center;
+	}
+
+	.recent-title {
+		font-size: var(--text-2xl);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-4);
+	}
+
+	.recent-description {
+		font-size: var(--text-base);
+		color: var(--text-secondary);
+		margin-bottom: var(--space-8);
+	}
+
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--space-6);
+	}
+
+	.post-card {
+		background: var(--bg-primary);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		transition: var(--transition);
+	}
+
+	.post-card:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--primary);
+	}
+
+	.post-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.post-image {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+	}
+
+	.post-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: var(--transition);
+	}
+
+	.post-card:hover .post-image img {
+		transform: scale(1.05);
+	}
+
+	.post-content {
+		padding: var(--space-5);
+		text-align: left;
+	}
+
+	.post-title {
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--text-primary);
+		margin-bottom: var(--space-3);
+		line-height: 1.3;
+	}
+
+	.post-excerpt {
+		color: var(--text-secondary);
+		line-height: 1.5;
+		margin-bottom: var(--space-4);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.post-date {
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		font-weight: 500;
+	}
+
+	/* Help Section */
+	.help-section {
+		background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+		color: white;
+		padding: var(--space-12);
+		border-radius: var(--radius-2xl);
+		text-align: center;
+	}
+
+	.help-title {
+		font-size: var(--text-2xl);
+		font-weight: 600;
+		margin-bottom: var(--space-4);
+	}
+
+	.help-description {
+		font-size: var(--text-base);
+		opacity: 0.9;
+		margin-bottom: var(--space-8);
+		line-height: 1.6;
+		max-width: 500px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.help-link {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: white;
+		background: rgba(255, 255, 255, 0.1);
+		padding: var(--space-3) var(--space-6);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		font-weight: 500;
+		transition: var(--transition);
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.help-link:hover {
+		background: rgba(255, 255, 255, 0.2);
+		transform: translateY(-1px);
+		text-decoration: none;
+		color: white;
+	}
+
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.error-hero {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+
+		.error-text {
+			text-align: center;
+		}
+
+		.error-title {
+			font-size: var(--text-4xl);
+		}
+
+		.error-actions {
+			justify-content: center;
+		}
+
+		.btn-large {
+			width: 100%;
+			max-width: 200px;
+		}
+
+		.search-input-group {
+			flex-direction: column;
+		}
+
+		.search-button {
+			padding: var(--space-4);
+		}
+
+		.links-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.posts-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.error-main {
+			padding: var(--space-12) 0;
+		}
+
+		.error-content {
+			gap: var(--space-12);
+		}
+
+		.error-number {
+			font-size: 6rem;
+		}
+
+		.error-title {
+			font-size: var(--text-3xl);
+		}
+
+		.search-section,
+		.help-section {
+			padding: var(--space-8);
+		}
+	}
+
+	/* Reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		.error-icon {
+			animation: none;
+		}
+	}
+</style>
